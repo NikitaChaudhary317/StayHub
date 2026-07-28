@@ -51,6 +51,9 @@ listingSchema.post("findOneAndDelete",async(listing)=>{
     if(listing){
         await Review.deleteMany({_id:{$in:listing.reviews}});
     }
+    if (listing.image?.url && listing.image.url.includes("res.cloudinary.com")) {
+        await cloudinary.uploader.destroy(listing.image.filename);
+    }
 })
 
 const Listing=mongoose.model("Listing",listingSchema);

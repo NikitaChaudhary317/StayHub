@@ -1,13 +1,23 @@
 const mongoose = require("mongoose");
 const Listing = require("./models/listing");
-const {listingSchema ,reviewSchema}=require("./schema.js");
+const Review=require("./models/review.js");
 const ExpressError=require("./utills/ExpressError.js");
-const Review=require("./models/review.js")
 const { cloudinary } = require("./cloudConfig");
+const {listingSchema ,reviewSchema}=require("./schema.js");
 
 module.exports.isLoggedIn=(req,res,next)=>{
     if(!req.isAuthenticated()){
-        req.session.redirectURL=req.originalUrl;
+        if(req.method === "GET") {
+            req.session.redirectUrl = req.originalUrl;
+        } else {
+            const referer = req.get('referer');
+            if (referer) {
+                const url = new URL(referer);
+                req.session.redirectUrl = url.pathname + url.search;
+            } else {
+                req.session.redirectUrl = "/";
+            }
+        }
         req.flash("error","you must be logged in to add listing!!");
         return res.redirect("/login");
     }
@@ -39,9 +49,9 @@ module.exports.isOwer=async(req,res,next)=>{
 module.exports.validateListing=(req,res,next) => {
   let {error}=listingSchema.validate(req.body);  
   if(error){
-    // if (req.file) {
-    //         await cloudinary.uploader.destroy(req.file.filename);
-    //     }
+    if (req.file) {
+      await cloudinary.uploader.destroy(req.file.filename);
+    }
     let errMsg=error.details.map((el)=>el.message).join(",");
     throw new ExpressError(400,errMsg);
   }else{

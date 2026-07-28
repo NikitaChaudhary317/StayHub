@@ -30,6 +30,7 @@ app.use(express.json());
 
 const dbUrl=process.env.ATLASDB_URL;
 const secret=process.env.SESSION_SECRET;
+const PORT = process.env.PORT || 8080;
 
 main()
   .then(() => console.log("Connected to MongoDB"))
@@ -43,12 +44,23 @@ async function main() {
   console.log("MongoDB Connected");
 }
 
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+app.use(express.urlencoded({extended:true}));
+app.use(methodOverride("_method"));
+app.engine('ejs', ejsMate);
+app.use(express.static(path.join(__dirname,"/public")));
+
 const store=MongoStore.create({
   mongoUrl:dbUrl,
   crypto:{
     secret:secret,
   },
-  touchAfter:24*3600,
+  touchAfter:24*60*60,
+});
+
+store.on("error",(err)=>{
+  console.log("ERROR in MONGO SESSION",err);
 });
 
 const sessionOptions={
@@ -62,15 +74,17 @@ const sessionOptions={
     httpOnly:true,
   },
 };
+
 app.use(session(sessionOptions));
 app.use(flash());
 
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
-app.use(express.urlencoded({extended:true}));
-app.use(methodOverride("_method"));
-app.engine('ejs', ejsMate);
-app.use(express.static(path.join(__dirname,"/public")));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+// use static serialize and deserialize of model for passport session support
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.use((req,res,next)=>{
   res.locals.success=req.flash("success");
@@ -85,21 +99,7 @@ app.use((req,res,next)=>{
     currPath === "/listings" ||
     (currPath.startsWith("/listings/") && !currPath.endsWith("/edit") && currPath !== "/listings/new");
   next();
-})
-
-
-store.on("error",(err)=>{
-  console.log("ERROR in MONGO SESSION",err);
 });
-
-
-app.use(passport.initialize());
-app.use(passport.session());
-passport.use(new LocalStrategy(User.authenticate()));
-
-// use static serialize and deserialize of model for passport session support
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
 
 app.get("/", (req, res) => {
     res.redirect("/listings");
@@ -117,9 +117,9 @@ app.all("/*splat", (req, res, next) => {
 //Error handling middleware
 app.use((err,req,res,next)=>{
   let  {statusCode=500,message="Something Went wrong"}=err;
-  res.status(statusCode).render("error.ejs",{err});
+  res.status(statusCode).render("error.ejs",{message});
 })
 
-app.listen(8080,()=>{
+app.listen(PORT,()=>{
     console.log("App is running in the port 8080");
 });

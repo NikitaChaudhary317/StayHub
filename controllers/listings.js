@@ -49,14 +49,10 @@ module.exports.showListing=async (req, res) => {
       path:"reviews",
       populate:{
       path:"author"
-      }})
-      .populate("owner");        
-      console.log("Listing ID:", listing._id);
-  console.log("Owner:", listing.owner);
-  console.log("Reviews:", listing.reviews);       
+      }}).populate("owner");                  
   if(!listing){
     req.flash("error","Listing you requested for does not exists!");
-   return res.redirect("/listings");
+    return res.redirect("/listings");
   }
   res.render("listings/show.ejs", { listing });
 }
@@ -75,6 +71,7 @@ module.exports.createListing=async (req, res) => {
   newListing.image={url,filename};
 
   await newListing.save();
+
   req.flash("success", "New Listing Created");
   res.redirect("/listings");
 }
@@ -112,13 +109,7 @@ module.exports.updateListing=async (req, res) => {
 
 module.exports.deletaLising=async (req, res) => {
   let { id } = req.params;
-  const listing = await Listing.findById(id);
-
-  if (listing && listing.image && listing.image.filename) {
-    await cloudinary.uploader.destroy(listing.image.filename);
-  }
-
-  await Listing.findByIdAndDelete(id);
-  req.flash("success","Listing Deleted..");
-  res.redirect("/listings");
+  let deletedListing = await Listing.findByIdAndDelete(id);
+  req.flash("success", "Listing Deleted!")
+  res.redirect("/listings")
 }
