@@ -1,0 +1,112 @@
+<style>
+  .navbar-brand i{
+    color:#fe424d;
+    font-size:2rem;
+  }
+  .btn-search{
+    background-color: #fe424d;
+    color: white;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;   
+    border:none;   
+    padding:0.6rem 1.2rem;
+  }
+  .btn-search:hover{
+    background-color: #fe424d;
+    color: white;
+  }
+  .btn-search i{
+    display: inline;
+    margin-right:5px;
+  }
+
+  .search-input{
+    width:320px;
+    border-radius:30px;
+    padding:0.6rem 1rem;
+  }
+  .nav-link{
+    color:#222 !important;
+  }
+
+@media (max-width:991px){
+
+    .navbar-collapse{
+        text-align:center;
+        padding-top:15px;
+    }
+
+    .search-input{
+        width:100%;
+        max-width:100%;
+    }
+
+    .btn-search{
+        width:100%;
+    }
+
+    .navbar-nav{
+        margin-top:10px;
+    }
+
+    .nav-link{
+        padding:10px 0;
+    }
+}
+
+@media (max-width:576px){
+
+    .navbar-brand i{
+        font-size:1.8rem;
+    }
+
+    .search-input{
+        font-size:14px;
+    }
+
+    .btn-search{
+        font-size:14px;
+    }
+
+}
+</style>
+
+<nav class="navbar navbar-expand-lg bg-body-light border-bottom sticky-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/listings"><i class="fa-regular fa-compass"></i></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link" href="/listings">Explore</a>
+      </div>
+
+      <div class="navbar-nav ms-auto d-none d-md-flex">
+        <form action="/listings" method="GET" class="d-flex flex-column flex-lg-row align-items-center mx-lg-auto my-3 my-lg-0 gap-2" role="search">
+          <input class="form-control me-2 search-input" type="search" name="search"  value="<%= typeof search !== 'undefined' ? search : '' %>" placeholder="Search destinations" aria-label="Search"/>
+          <% if(locals.category){ %>
+            <input type="hidden" name="category" value="<%= locals.category %>">
+          <% } %>
+          <button class="btn btn-search" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
+        </form>
+      </div>
+     
+
+      <div class="navbar-nav ms-auto text-center">
+        <a class="nav-link" href="/listings/new">StayHub your home</a>
+        <% if(!locals.currUser) { %>
+          <a class="nav-link " aria-current="page" href="/signup"><b>Sign up</b></a>
+          <a class="nav-link" href="/login"><b>Log in</b></a>
+        <% }%>
+        <% if(locals.currUser) { %>
+          <a class="nav-link" href="/logout">Log out</a>
+        <% } %>
+      </div>
+
+    </div>
+  </div>
+</nav>

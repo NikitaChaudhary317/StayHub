@@ -1,0 +1,110 @@
+<% layout('/layout/boilerplate') -%>
+  <body>
+    <div class="row">
+      <div class="col-8 offset-2">
+        
+      <h3>Create a New Listing</h3>
+      <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
+        
+        <div class="mb-3">
+          <label for="title" class="form-label">Title</label>
+          <input 
+            name="listing[title]" 
+            placeholder="Add a catchy title" 
+            type="text" 
+            class="form-control" 
+            required            
+          />
+          <div class="valid-feedback">
+            Looks good!
+          </div>
+          <div class="invalid-feedback">
+            Please provide a valid Title.
+          </div>
+        </div>
+        
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea
+            name="listing[description]"
+            placeholder="enter description"
+            class="form-control" 
+            required
+          ></textarea>
+          <div class="invalid-feedback">
+            Please provide a valid Description.
+          </div>
+        </div>
+        
+        <div class="mb-3">
+          <label for="image" class="form-label">Upload Img</label>
+          <input
+            name="listing[image]"
+            type="file"
+            class="form-control" 
+          />
+        </div>
+
+        <div class="row">
+          <div class="mb-3 col-md-4">
+          <label for="price" class="form-label">Price</label>
+          <input 
+            name="listing[price]" 
+            placeholder="1200" 
+            type="number" 
+            class="form-control"
+            required />
+          <div class="invalid-feedback">
+            Please provide a valid Price.
+          </div>
+        </div>
+        
+        <div class="mb-3 col-md-8">
+          <label for="country" class="form-label">Country</label>
+          <input 
+            name="listing[country]" 
+            placeholder="India" 
+            type="text" 
+            class="form-control" 
+            required/>
+          <div class="invalid-feedback">
+            Please provide a valid Country.
+          </div>
+        </div>
+        </div>
+                
+        <div class="mb-3">
+          <label for="location" class="form-label">Location</label>
+          <input
+            name="listing[location]"
+            placeholder="Jaypur"
+            type="text"
+            class="form-control"
+            required
+          />
+          <div class="invalid-feedback">
+            Please provide a valid Location.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Categories</label>
+          <div class="d-flex flex-wrap gap-2">
+              <% validCategories.forEach(category => { %>
+                <input type="checkbox" class="btn-check category-checkbox" id="<%= category %>" name="listing[category][]" value="<%= category %>" autocomplete="off">
+                <label class="btn btn-outline-dark rounded-pill px-3" for="<%= category %>">
+                <%= category.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ") %>
+                </label>
+              <% }) %>
+          </div>
+          <div id="categoryFeedback" class="invalid-feedback">
+            Please select at least one category.
+          </div>
+        </div>
+        
+        <button class="btn btn-dark add-btn">Add</button>
+        <br/><br/>
+      </form>
+    </div>
+    </div>
+  </body>

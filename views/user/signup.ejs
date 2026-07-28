@@ -1,0 +1,63 @@
+<% layout('/layout/boilerplate') -%>
+
+<div class="row">
+    <div class="col-8 offset-2">
+        <h1>SignUp On StayHub</h1>
+        <form method="post" action="/signup" novalidate class="needs-validation">
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input 
+                    name="username"
+                    id="username" 
+                    type="text" 
+                    class="form-control" 
+                    required            
+                />
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please provide a valid Username.
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input 
+                    name="email"
+                    id="email" 
+                    type="email" 
+                    class="form-control" 
+                    required            
+                />
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please provide a valid Email.
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input 
+                    name="password"
+                    id="password" 
+                    type="password" 
+                    class="form-control" 
+                    required            
+                />
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please provide a valid Password.
+                </div>
+            </div>
+
+            <button class="btn btn-success">SignUp</button>
+        </form>
+    </div>
+</div>
+
+    

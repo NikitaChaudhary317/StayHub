@@ -1,0 +1,114 @@
+<% layout('/layout/boilerplate') -%>
+<body>
+
+  <div class="row">
+    <div class="col-8 offset-2">
+      <h3>Edit your Listing</h3>
+      <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation" enctype="multipart/form-data">
+
+        <div class="mb-3">
+          <label for="title" class="form-label">Title</label>
+          <input 
+            name="listing[title]" 
+            value="<%= listing.title %>" 
+            type="text" 
+            class="form-control"
+            required/>
+          <div class="invalid-feedback">
+            Please provide a valid Title.
+          </div>
+        </div>
+      
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea 
+            name="listing[description]" 
+            class="form-control"
+            required><%= listing.description %></textarea>
+          <div class="invalid-feedback">
+            Description can't be empty! 
+          </div>
+        </div>
+
+        <div class="mb-3">
+          Original Listing Image<br>
+          <img src="<%= originalImageUrl %>">
+        </div>
+
+        <div class="mb-3">
+          <label for="image" class="form-label">Upload new Image</label>
+          <input
+            id="image"
+            name="listing[image]"
+            type="file"
+            class="form-control"
+          />
+          <div class="invalid-feedback">
+            Please provide a valid Image.
+          </div>
+        </div>
+      
+      <div class="row">
+        <div class="mb-3 col-md-4">
+          <label for="price" class="form-label">Price</label>
+          <input 
+            name="listing[price]" 
+            value="<%= listing.price %>" 
+            type="number" 
+            class="form-control" 
+            required
+          />
+          <div class="invalid-feedback">
+            Please provide a valid Price.
+          </div>
+        </div>
+      
+        <div class="mb-3 col-md-8">
+          <label for="country" class="form-label">Country</label>
+          <input
+            name="listing[country]"
+            value="<%= listing.country %>"
+            type="text"
+            class="form-control"
+            required
+          />
+          <div class="invalid-feedback">
+            Please provide a valid Country.
+          </div>
+        </div>
+      </div>
+      
+      <div class="mb-3">
+        <label for="location" class="form-label">Location</label>
+        <input
+          name="listing[location]"
+          value="<%= listing.location %>"
+          type="text"
+          class="form-control"
+          required
+        />
+        <div class="invalid-feedback">
+          Please provide a valid Location.
+        </div>
+      </div>
+
+       <div class="mb-3">
+          <label class="form-label">Categories</label>
+          <div class="d-flex flex-wrap gap-2">
+            <% validCategories.forEach(category => { %>
+              <input type="checkbox" class="btn-check category-checkbox" id="<%= category %>" name="listing[category][]" value="<%= category %>" autocomplete="off" <%= listing.category.includes(category) ? "checked" : "" %>>
+              <label class="btn btn-outline-dark rounded-pill" for="<%= category %>">
+                <%= category.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ") %>
+              </label>
+            <% }) %>
+          </div>
+          <div id="categoryFeedback" class="invalid-feedback">
+            Please select at least one category.
+          </div>
+        </div>
+
+      <button class="btn btn-dark edit-btn mb-3">Edit</button>
+    </form>
+    </div>
+  </div>
+</body>
