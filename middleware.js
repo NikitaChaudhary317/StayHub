@@ -46,7 +46,7 @@ module.exports.isOwer=async(req,res,next)=>{
 };
 
 //server side validation check for listing
-module.exports.validateListing=(req,res,next) => {
+module.exports.validateListing=async(req,res,next) => {
   let {error}=listingSchema.validate(req.body);  
   if(error){
     if (req.file) {
