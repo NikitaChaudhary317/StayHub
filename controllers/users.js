@@ -28,12 +28,8 @@ module.exports.renderLoginForm=(req,res)=>{
 
 module.exports.login=async(req,res)=>{
     req.flash("success" , "Welcome back again to StayHub!");
-    let redirecturl=res.locals.redirectURL || "/listings";
-    res.redirect(
-        redirectUrl && redirectUrl.startsWith("/")
-            ? redirectUrl
-            : "/"
-    );    
+    let redirectUrl = res.locals.redirectUrl || "/listings";
+    res.redirect(redirectUrl);  
 }
 
 module.exports.logOut=(req,res,next)=>{

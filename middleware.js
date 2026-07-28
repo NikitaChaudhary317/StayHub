@@ -7,30 +7,25 @@ const {listingSchema ,reviewSchema}=require("./schema.js");
 
 module.exports.isLoggedIn=(req,res,next)=>{
     if(!req.isAuthenticated()){
-        if(req.method === "GET") {
-            req.session.redirectUrl = req.originalUrl;
-        } else {
-            const referer = req.get('referer');
-            if (referer) {
-                const url = new URL(referer);
-                req.session.redirectUrl = url.pathname + url.search;
-            } else {
-                req.session.redirectUrl = "/";
-            }
-        }
+        req.session.redirectUrl = req.originalUrl;
         req.flash("error","you must be logged in to add listing!!");
         return res.redirect("/login");
     }
     next();
 }
 
-module.exports.saveRedirectUrl=(req,res,next)=>{
-    if(req.session.redirectURL){
-        res.locals.redirectURL = req.session.redirectURL;
+// module.exports.saveRedirectUrl=(req,res,next)=>{
+//     if(req.session.redirectURL){
+//         res.locals.redirectURL = req.session.redirectURL;
+//     }
+//     next();
+// };
+module.exports.saveRedirectUrl = (req, res, next) => {
+    if (req.session.redirectUrl) {
+        res.locals.redirectUrl = req.session.redirectUrl;
     }
     next();
 };
-
 module.exports.isOwer=async(req,res,next)=>{
     let {id}=req.params;
     let listing=await Listing.findById(id);
