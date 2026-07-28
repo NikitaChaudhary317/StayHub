@@ -95,7 +95,9 @@
       <%for(let review of listing.reviews){%>
         <div class="card col-5 ms-3 mb-3">
           <div class="card-body mb-3">
-            <h5 class="card-title">@<%= review.author.username %></h5>
+            <h5 class="card-title">
+              <%= review.author ? review.author.username : "Deleted User" %>
+            </h5>
             <p class="starability-result card-text" data-rating="<%=review.rating %>"></p>
             <p class="card-text"><%=review.comment %></p>              
         </div>
