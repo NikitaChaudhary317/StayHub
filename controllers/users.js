@@ -4,16 +4,16 @@ module.exports.renderSignUpForm=(req,res)=>{
     res.render("user/signup.ejs");
 }
 
-module.exports.signUp=async(req,res)=>{
+module.exports.signUp=async(req,res,next)=>{
     try{
         let {username,email,password}=req.body;
         const newuser=new User({username,email});
         const registeredUser=await User.register(newuser,password);
         req.login(registeredUser,(err)=>{
             if(err){
-                next(err);
+                return next(err);
             }
-            req.flash("success","Welcome to StayHub");
+            req.flash("success","Welcome to StayHub!");
             res.redirect("/listings");
         })
     }catch(e){
@@ -27,7 +27,7 @@ module.exports.renderLoginForm=(req,res)=>{
 }
 
 module.exports.login=async(req,res)=>{
-    req.flash("success" , "Welcome back again to WanderLust! You are logged in! ");
+    req.flash("success" , "Welcome back again to StayHub!");
     let redirecturl=res.locals.redirectURL || "/listings";
     res.redirect(redirecturl);     
 }
